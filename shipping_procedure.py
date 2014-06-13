@@ -2,8 +2,10 @@
 import robots
 import sys
 
-class Melon(object):
+class Product(object):
+    pass
 
+class Melon(object):
     def __init__(self, melon_type):
         self.melon_type = melon_type
         self.weight = 0.0
@@ -14,12 +16,17 @@ class Melon(object):
         robots.cleanerbot.clean(self)
         robots.stickerbot.apply_logo(self)
     
+    def watermelonize(self):
+        robots.painterbot.paint(self)
+
     def __str__(self):
         if self.weight <= 0:
             return self.melon_type
         else:
-            return "%s %0.2fLB %s" % (self.color, self.weight, self.melon_type)
-    
+            return "%s %0.2fLB %s" % (self.color, self.weight, self.melon_type)    
+
+class WinterSquash(Product):
+    pass
 
 def main():
     f = open("standing_orders2.log")
@@ -35,7 +42,7 @@ def main():
                 print "\nALL MELONS HAVE BEEN PICKED"
                 print "ORDERS FAILED TO BE FULFILLED!"
                 sys.exit()
-            
+
             m = Melon(melon_type)
             robots.pickerbot.pick(m)
             count += 1
@@ -43,6 +50,8 @@ def main():
             m.prep()
             
             # evaluate melon
+            if m.color != "Green":
+                m.watermelonize()
             presentable = robots.inspectorbot.evaluate(m)
             if presentable:
                 melons.append(m)
